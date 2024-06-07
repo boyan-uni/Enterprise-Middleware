@@ -1,6 +1,5 @@
 package uk.ac.newcastle.enterprisemiddleware.contact;
 
-
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import uk.ac.newcastle.enterprisemiddleware.area.Area;
 import uk.ac.newcastle.enterprisemiddleware.area.AreaService;
