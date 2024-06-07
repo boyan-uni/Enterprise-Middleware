@@ -74,7 +74,7 @@ public class Restaurant implements Serializable {
         this.postcode = postcode;
     }
 
-    // Todo. Cascade Deletion
+    // Cascade Deletion
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Review> reviews;
