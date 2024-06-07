@@ -4,6 +4,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -39,6 +40,19 @@ public class RestaurantRepository {
         return em.createQuery(criteria).getResultList();
     }
 
+    public Restaurant findByPhoneNumber(String phoneNumber) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Restaurant> criteria = cb.createQuery(Restaurant.class);
+        Root<Restaurant> restaurant = criteria.from(Restaurant.class);
+        criteria.select(restaurant).where(cb.equal(restaurant.get("phoneNumber"), phoneNumber));
+
+        try {
+            return em.createQuery(criteria).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     Restaurant create(Restaurant restaurant) throws Exception {
         log.info("RestaurantRepository.create() - Creating " + restaurant.getName());
 
@@ -66,4 +80,5 @@ public class RestaurantRepository {
 
         return restaurant;
     }
+
 }
