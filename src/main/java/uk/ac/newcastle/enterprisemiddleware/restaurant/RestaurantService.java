@@ -31,7 +31,7 @@ public class RestaurantService {
         return restaurantRepository.findAllOrderedByName();
     }
 
-    Restaurant findById(Long id) {
+    public Restaurant findById(Long id) {
         return restaurantRepository.findById(id);
     }
 

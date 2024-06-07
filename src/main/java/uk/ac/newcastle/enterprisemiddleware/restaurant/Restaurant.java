@@ -1,10 +1,14 @@
 package uk.ac.newcastle.enterprisemiddleware.restaurant;
 
+import uk.ac.newcastle.enterprisemiddleware.review.Review;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -35,6 +39,7 @@ public class Restaurant implements Serializable {
     @NotNull
     @Size(min = 6, max = 6, message = "Postcode size must be 6")
     private String postcode;
+
 
     public Long getId() {
         return id;
