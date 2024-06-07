@@ -1,4 +1,4 @@
-package uk.ac.newcastle.enterprisemiddleware.user;
+package uk.ac.newcastle.enterprisemiddleware.restaurant;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -16,29 +16,28 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 @QuarkusTest
-@TestHTTPEndpoint(UserRestService.class)
+@TestHTTPEndpoint(RestaurantRestService.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @QuarkusTestResource(H2DatabaseTestResource.class)
-class UserRestServiceIntegrationTest {
+class RestaurantRestServiceIntegrationTest {
 
-    private static User user;
+    private static Restaurant restaurant;
 
     @BeforeAll
     static void setup() {
-        user = new User();
-        user.setName("TestUser");
-        user.setEmail("testuser@email.com");
-        user.setPhoneNumber("01234567890");
+        restaurant = new Restaurant();
+        restaurant.setName("TestRestaurant");
+        restaurant.setPhoneNumber("01234567890");
+        restaurant.setPostcode("AB123C");
     }
 
     @Test
     @Order(1)
-    public void testCanCreateUser() {
+    public void testCanCreateRestaurant() {
         given().
                 contentType(ContentType.JSON).
-                body(user).
+                body(restaurant).
                 when().
                 post().
                 then().
@@ -47,44 +46,44 @@ class UserRestServiceIntegrationTest {
 
     @Test
     @Order(2)
-    public void testCanGetUsers() {
+    public void testCanGetRestaurants() {
         Response response = when().
                 get().
                 then().
                 statusCode(200).
                 extract().response();
 
-        User[] result = response.body().as(User[].class);
+        Restaurant[] result = response.body().as(Restaurant[].class);
 
         assertEquals(1, result.length);
-        assertTrue(user.getName().equals(result[0].getName()), "Name not equal");
-        assertTrue(user.getEmail().equals(result[0].getEmail()), "Email not equal");
-        assertTrue(user.getPhoneNumber().equals(result[0].getPhoneNumber()), "Phone number not equal");
+        assertTrue(restaurant.getName().equals(result[0].getName()), "Name not equal");
+        assertTrue(restaurant.getPhoneNumber().equals(result[0].getPhoneNumber()), "Phone number not equal");
+        assertTrue(restaurant.getPostcode().equals(result[0].getPostcode()), "Postcode not equal");
     }
 
     @Test
     @Order(3)
-    public void testDuplicateEmailCausesError() {
+    public void testDuplicatePhoneNumberCausesError() {
         given().
                 contentType(ContentType.JSON).
-                body(user).
+                body(restaurant).
                 when().
                 post().
                 then().
                 statusCode(409).
-                body("reasons.email", containsString("email is already used"));
+                body("reasons.phoneNumber", containsString("phone number is already used"));
     }
 
     @Test
     @Order(4)
-    public void testCanDeleteUser() {
+    public void testCanDeleteRestaurant() {
         Response response = when().
                 get().
                 then().
                 statusCode(200).
                 extract().response();
 
-        User[] result = response.body().as(User[].class);
+        Restaurant[] result = response.body().as(Restaurant[].class);
 
         when().
                 delete(result[0].getId().toString()).
@@ -95,23 +94,21 @@ class UserRestServiceIntegrationTest {
 
     @Test
     @Order(5)
-    public void testInvalidUserCreation() {
-        User invalidUser = new User();
-        invalidUser.setName("");                // Invalid name
-        invalidUser.setEmail("invalidEmail");   // Invalid email
-        invalidUser.setPhoneNumber("123");      // Invalid phone number
+    public void testInvalidRestaurantCreation() {
+        Restaurant invalidRestaurant = new Restaurant();
+        invalidRestaurant.setName("&^");            // Invalid name
+        invalidRestaurant.setPhoneNumber("123");    // Invalid phone number
+        invalidRestaurant.setPostcode("12345");     // Invalid postcode
 
         given().
                 contentType(ContentType.JSON).
-                body(invalidUser).
+                body(invalidRestaurant).
                 when().
                 post().
                 then().
                 statusCode(400).
                 body("reasons.name", containsString("Please use a name without numbers or specials")).
-                body("reasons.email", containsString("The email address must be in the format of name@domain.com")).
-                body("reasons.phoneNumber", containsString("Please use a vaild phoneNumber"));
+                body("reasons.phoneNumber", containsString("Please use a vaild phoneNumber")).
+                body("reasons.postcode", containsString("Postcode size must be 6"));
     }
-
 }
-

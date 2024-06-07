@@ -36,7 +36,7 @@ public class User implements Serializable {
     private String email;
 
     @NotNull
-    @Pattern(regexp = "0[0-9]{10}")
+    @Pattern(regexp = "0[0-9]{10}", message = "Please use a vaild phoneNumber")
     private String phoneNumber;
 
     public Long getId() {

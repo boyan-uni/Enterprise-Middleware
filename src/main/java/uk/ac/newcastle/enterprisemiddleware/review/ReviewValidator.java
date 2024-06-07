@@ -30,7 +30,7 @@ public class ReviewValidator {
 
         // Check the uniqueness of the review by user and restaurant
         if (reviewAlreadyExists(review.getUser().getId(), review.getRestaurant().getId())) {
-            throw new UniqueReviewException("Unique Review Violation");
+            throw new UniqueReviewException("Unique Review Violation：A review for this user and restaurant already exists");
         }
     }
 

@@ -28,12 +28,12 @@ public class Restaurant implements Serializable {
     private String name;
 
     @NotNull
-    @Pattern(regexp = "0[0-9]{10}")
+    @Pattern(regexp = "0[0-9]{10}", message = "Please use a vaild phoneNumber")
     @Column(unique = true)
     private String phoneNumber;
 
     @NotNull
-    @Size(min = 6, max = 6)
+    @Size(min = 6, max = 6, message = "Postcode size must be 6")
     private String postcode;
 
     public Long getId() {
