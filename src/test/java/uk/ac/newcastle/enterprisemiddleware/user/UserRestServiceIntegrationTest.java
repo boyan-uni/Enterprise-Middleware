@@ -91,6 +91,8 @@ class UserRestServiceIntegrationTest {
                 delete(result[0].getId().toString()).
                 then().
                 statusCode(204);
+
+        // Cascade Deletion finished
     }
 
 
@@ -113,10 +115,6 @@ class UserRestServiceIntegrationTest {
                 body("reasons.email", containsString("The email address must be in the format of name@domain.com")).
                 body("reasons.phoneNumber", containsString("Please use a vaild phoneNumber"));
     }
-
-    /**
-     * TODO. 删除 User 时，同时删除相关 review
-     */
 
 }
 

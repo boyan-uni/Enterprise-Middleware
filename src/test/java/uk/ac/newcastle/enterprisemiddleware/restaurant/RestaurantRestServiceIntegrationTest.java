@@ -89,6 +89,8 @@ class RestaurantRestServiceIntegrationTest {
                 delete(result[2].getId().toString()).
                 then().
                 statusCode(204);
+
+        // Cascade Deletion finished
     }
 
 

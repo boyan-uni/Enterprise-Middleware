@@ -4,6 +4,8 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import uk.ac.newcastle.enterprisemiddleware.area.Area;
 import uk.ac.newcastle.enterprisemiddleware.area.AreaService;
 import uk.ac.newcastle.enterprisemiddleware.area.InvalidAreaCodeException;
+import uk.ac.newcastle.enterprisemiddleware.review.Review;
+import uk.ac.newcastle.enterprisemiddleware.review.ReviewRepository;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -26,6 +28,9 @@ public class RestaurantService {
 
     @Inject
     RestaurantRepository restaurantRepository;
+
+    @Inject
+    ReviewRepository reviewRepository; // Add ReviewRepository Injection
 
     List<Restaurant> findAllOrderedByName() {
         return restaurantRepository.findAllOrderedByName();
@@ -61,6 +66,12 @@ public class RestaurantService {
         Restaurant deletedRestaurant = null;
 
         if (restaurant.getId() != null) {
+            // firstly delete all reviews associated with the restaurant
+            List<Review> reviews = reviewRepository.findByRestaurantId(restaurant.getId());
+            for (Review review : reviews) {
+                reviewRepository.delete(review);
+            }
+            // secondly delete the restaurant
             deletedRestaurant = restaurantRepository.delete(restaurant);
         } else {
             log.info("RestaurantService.delete() - No ID was found so can't Delete.");

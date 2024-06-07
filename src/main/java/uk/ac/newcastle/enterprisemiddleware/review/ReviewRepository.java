@@ -27,12 +27,12 @@ public class ReviewRepository {
         return query.getResultList();
     }
 
-    List<Review> findByUserId(Long userId) {
+    public List<Review> findByUserId(Long userId) {
         TypedQuery<Review> query = em.createNamedQuery(Review.FIND_BY_USER, Review.class).setParameter("userId", userId);
         return query.getResultList();
     }
 
-    List<Review> findByRestaurantId(Long restaurantId) {
+    public List<Review> findByRestaurantId(Long restaurantId) {
         TypedQuery<Review> query = em.createNamedQuery(Review.FIND_BY_RESTAURANT, Review.class).setParameter("restaurantId", restaurantId);
         return query.getResultList();
     }
@@ -57,7 +57,7 @@ public class ReviewRepository {
         return review;
     }
 
-    Review delete(Review review) throws Exception {
+    public Review delete(Review review) throws Exception {
         log.info("ReviewRepository.delete() - Deleting review for restaurant " + review.getRestaurant().getName() + " by user " + review.getUser().getName());
 
         if (review.getId() != null) {

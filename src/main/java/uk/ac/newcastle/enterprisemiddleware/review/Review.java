@@ -30,11 +30,11 @@ public class Review implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)        // 不能为空
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)  // 不能为空，每条评论必须关联到一个用户和一个餐厅
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     @NotNull

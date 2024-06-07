@@ -1,5 +1,6 @@
 package uk.ac.newcastle.enterprisemiddleware.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import uk.ac.newcastle.enterprisemiddleware.review.Review;
 
 import javax.persistence.*;
@@ -71,6 +72,17 @@ public class Restaurant implements Serializable {
 
     public void setPostcode(String postcode) {
         this.postcode = postcode;
+    }
+
+    // Todo. Cascade Deletion
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Review> reviews;
+    public List<Review> getReviews() {
+        return reviews;
+    }
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     @Override
